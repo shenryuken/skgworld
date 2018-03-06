@@ -69,6 +69,8 @@ Route::prefix('admin')->group(function (){
 	Route::get('/register-member', 'AdminController@registrationMemberForm');
   	Route::post('/register-member', 'AdminController@registerMember');
 
+  	Route::get('admin/firstTimePurchaseRegistration', 'AdminController@firstTimePurchaseRegistration');
+
   Route::get('/register-staff', 'AdminController@registrationStaffForm');
   Route::post('/register-staff', 'AdminController@registerStaff');
 

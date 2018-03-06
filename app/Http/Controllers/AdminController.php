@@ -143,7 +143,7 @@ class AdminController extends Controller
     {
         $introducer = $request->introducer;
         $admin = Admin::where('username', $introducer)->first();
-        $user  = User::where('username', $introducer)->first();
+        $member= User::where('username', $introducer)->first();
         $rank  = Rank::where('name', $request->rank)->first();
 
         if (count($admin) == 1){
@@ -175,7 +175,7 @@ class AdminController extends Controller
             'id_type'           => 'required',
             'id_no'             => 'required',
             'id_pic'            => 'image|mimes:jpeg,bmp,png|size:2000',
-            'introducer'        => 'required',
+            'introducer'        => 'required|exists:'.$table.',username',
             'mobile_no'         => 'required',
             'email'             => 'required',
             'street'            => 'required',
@@ -189,102 +189,104 @@ class AdminController extends Controller
             'account_type'      => 'required',
             'beneficiary_name'  => '',
             'relationship'      => 'required_with:beneficiary_name',
-            'beneficiary_address'   => 'required_with:relationship, beneficiary_name',
-            'beneficiary_mobile_no' => 'required_with:relationship, beneficiary_name, beneficiary_address',
+            'beneficiary_address'   => 'required_with:beneficiary_name',
+            'beneficiary_mobile_no' => 'required_with:beneficiary_name, beneficiary_address',
             'rank_id'           => '',
             'security_code'     => 'required',
         ]);
 
         $hashedCode = Auth::guard('admin')->user()->security_code;
 
-        if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode)){
+        if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
+        {
+            $user = new User;
+            $user->username   = $request->username;
+            $user->password   = bcrypt($request->password);
+            $user->security_code = bcrypt($request->password); 
+            $user->email      = $request->email;
+            $user->email_token   = Password::getRepository()->createNewToken();
+            $user->mobile_no  = $request->mobile_no;
+            $user->introducer = $request->introducer;
+            $user->rank_id    = $rank->id;
+            //$user->save();
 
-                $user = new User;
-                $user->username   = $request->username;
-                $user->password   = bcrypt($request->password);
-                $user->security_code = bcrypt($request->password); 
-                $user->email      = $request->email;
-                $user->email_token   = Password::getRepository()->createNewToken();
-                $user->mobile_no  = $request->mobile_no;
-                $user->introducer = $request->introducer;
-                $user->rank_id    = $rank->id;
-                //$user->save();
+            $profile = new Profile;     
+            $profile->full_name = $request->name;
+            $profile->dob       = $request->dob;
+            $profile->gender    = $request->gender;
+            $profile->marital_status = $request->marital_status;
+            $profile->id_type   = $request->id_type;
+            $profile->id_no     = $request->id_no;
+            $profile->id_pic    = $request->id_pic;
+            $profile->street    = $request->street;
+            $profile->city      = $request->city;
+            $profile->postcode  = $request->postcode;
+            $profile->state     = $request->state;
+            $profile->country   = $request->country;
+            $profile->contact_no    = $request->mobile_no;
+            //$user->profile()->save($profile);
 
-                $profile = new Profile;     
-                $profile->full_name = $request->name;
-                $profile->dob       = $request->dob;
-                $profile->gender    = $request->gender;
-                $profile->marital_status = $request->marital_status;
-                $profile->id_type   = $request->id_type;
-                $profile->id_no     = $request->id_no;
-                $profile->id_pic    = $request->id_pic;
-                $profile->street    = $request->street;
-                $profile->city      = $request->city;
-                $profile->postcode  = $request->postcode;
-                $profile->state     = $request->state;
-                $profile->country   = $request->country;
-                $profile->contact_no    = $request->mobile_no;
-                //$user->profile()->save($profile);
-
-                DB::transaction(function() use ($user, $profile) {
-                    $user->save();
-                    $user->profile()->save($profile);
-                });
-
-                //profile, bank,
-
-                $user->rank()->associate($rank);
+            DB::transaction(function() use ($user, $profile) {
                 $user->save();
+                $user->profile()->save($profile);
+            });
+
+            //profile, bank,
+
+            $user->rank()->associate($rank);
+            $user->save();
 
            
-
-            if($rank->id == 4)
-            {
-                $active_do = new ActiveDo;
-                $active_do->user_id = $user->id;
-                $active_do->rank    = $request->rank;
-                $active_do->save();
-
-                $active_sdo = ActiveSdo::where('user_id', $user->id)->first();
-
-                if($active_sdo)
+            if ($user) {
+                if($rank->id == 4)
                 {
-                   $active_sdo->delete();
+                    $active_do = new ActiveDo;
+                    $active_do->user_id = $user->id;
+                    $active_do->rank    = $request->rank;
+                    $active_do->save();
+
+                    $active_sdo = ActiveSdo::where('user_id', $user->id)->first();
+
+                    if($active_sdo)
+                    {
+                       $active_sdo->delete();
+                    }
+                } 
+                elseif($rank->id < 4 )
+                {
+                    $active_do = ActiveDo::where('user_id', $user->id)->first();
+                    $active_sdo = ActiveSdo::where('user_id', $user->id)->first();
+                    if($active_do)
+                    {
+                       $active_do->delete();  
+                    }
+
+                    if($active_sdo)
+                    {
+                        $active_sdo->delete();
+                    }
                 }
-            } 
-            elseif($rank->id < 4 )
-            {
-                $active_do = ActiveDo::where('user_id', $user->id)->first();
-                $active_sdo = ActiveSdo::where('user_id', $user->id)->first();
-                if($active_do)
+                
+                elseif($rank->id == 5) 
                 {
-                   $active_do->delete();  
-                }
+                    $active_do = new ActiveDo;
+                    $active_do->user_id = $user->id;
+                    $active_do->rank    = $request->rank;
+                    $active_do->save();
 
-                if($active_sdo)
-                {
-                    $active_sdo->delete();
+                    $active_sdo = new ActiveSdo;
+                    $active_sdo->user_id = $user->id;
+                    $active_sdo->rank    = $request->rank;
+                    $active_sdo->save();
+
+                    // $active_do = ActiveDo::where('user_id', $user->id)->first();
+                    // if($active_do)
+                    // {
+                    //    $active_do->delete();
+                    // }
                 }
             }
             
-            elseif($rank->id == 5) 
-            {
-                $active_do = new ActiveDo;
-                $active_do->user_id = $user->id;
-                $active_do->rank    = $request->rank;
-                $active_do->save();
-
-                $active_sdo = new ActiveSdo;
-                $active_sdo->user_id = $user->id;
-                $active_sdo->rank    = $request->rank;
-                $active_sdo->save();
-
-                // $active_do = ActiveDo::where('user_id', $user->id)->first();
-                // if($active_do)
-                // {
-                //    $active_do->delete();
-                // }
-            }
 
             Mail::to($user)->send(new VerifyEmail($user));
 
@@ -313,7 +315,7 @@ class AdminController extends Controller
             }
 
             //return redirect('admin/register-member')->with('success', 'Successfully register this account:'.$user->email);
-            return redirect('admin/firstTimePurchaseRegistration');
+            return view('admin.firstTimePurchaseRegistration', compact('user'));
         }
 
         return back()->withInput()
@@ -322,7 +324,9 @@ class AdminController extends Controller
 
     public function firstTimePurchaseRegistration()
     {
-        //
+        $products = Product::all();
+
+        return view('admin.firstTimeMall', compact('products'));
     }
 
     public function registrationStaffForm()
