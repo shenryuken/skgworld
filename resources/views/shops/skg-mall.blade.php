@@ -77,14 +77,3 @@ SKG MALL
 {{-- page level scripts --}}
 @section('footer_scripts')
 @stop
-
-
-
-
-
-
-
-
-
-0
-0
