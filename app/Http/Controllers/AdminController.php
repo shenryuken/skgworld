@@ -135,6 +135,7 @@ class AdminController extends Controller
         $ranks  = Rank::all();
         $banks  = Bank::all();
         $products = Product::all();
+        $packages = Package::all();
 
         return view('admin.register-member', compact('ranks', 'banks', 'products'));
     }
@@ -231,13 +232,15 @@ class AdminController extends Controller
                 $user->profile()->save($profile);
             });
 
-            //profile, bank,
-
-            $user->rank()->associate($rank);
-            $user->save();
-
            
+
             if ($user) {
+
+                 //profile, bank,
+
+                $user->rank()->associate($rank);
+                $user->save();
+                
                 if($rank->id == 4)
                 {
                     $active_do = new ActiveDo;
