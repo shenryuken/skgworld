@@ -13,6 +13,7 @@ use App\Admin;
 use App\User;
 use App\Profile;
 use App\Product;
+use App\Package;
 use App\Referral;
 use App\Role;
 use App\Sale;
@@ -137,7 +138,7 @@ class AdminController extends Controller
         $products = Product::all();
         $packages = Package::all();
 
-        return view('admin.register-member', compact('ranks', 'banks', 'products'));
+        return view('admin.register-member', compact('ranks', 'banks', 'products', 'packages'));
     }
 
     public function registerMember(Request $request)

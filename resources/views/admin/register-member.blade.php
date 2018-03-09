@@ -1,82 +1,92 @@
 @extends('layouts.joli.app')
+{{-- Page title --}}
+
+@section('header')
+<style type="text/css">
+  /* Default State */
+  input[type=checkbox] + div[class*="pid-"] input { display: none; }
+
+  /* Toggled State */
+  input[type=checkbox]:checked + div[class*="pid-"] { display:inline }
+</style>
+@parent
+@stop
 <?php $page_title = 'Register New Member'; ?>
 @section('content')
 <div class="row">
-    <div class="col-md-12">
-    	 <!-- START DEFAULT WIZARD -->
-        <div class="block">
-            <h4>Default Wizard</h4>
-            <form action="" method="post" role="form" class="form-horizontal">
-            <div class="wizard show-submit">
-                <ul>
-                    <li>
-                        <a href="#step-1">
-                            <span class="stepNumber">1</span>
-                            <span class="stepDesc">Step 1<br /><small>Login Information</small></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#step-2">
-                            <span class="stepNumber">2</span>
-                            <span class="stepDesc">Step 2<br /><small>Personal Information</small></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#step-3">
-                            <span class="stepNumber">3</span>
-                            <span class="stepDesc">Step 3<br /><small>Contact Information</small></span>                   
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#step-4">
-                            <span class="stepNumber">4</span>
-                            <span class="stepDesc">Step 4<br /><small>Address Information</small></span>                   
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#step-5">
-                            <span class="stepNumber">5</span>
-                            <span class="stepDesc">Step 5<br /><small>Bank Account Information</small></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#step-6">
-                            <span class="stepNumber">6</span>
-                            <span class="stepDesc">Step 6<br /><small>Beneficiary Info (OPTIONAL)</small></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#step-7">
-                            <span class="stepNumber">7</span>
-                            <span class="stepDesc">Step 7<br /><small>Step 7 description</small></span>                   
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#step-8">
-                            <span class="stepNumber">8</span>
-                            <span class="stepDesc">Step 8<br /><small>Step 8 description</small></span>                   
-                        </a>
-                    </li>
-                </ul>
-                
-                	
-                <div id="step-1">  
-
-	                <div class="form-group">
-				        <label class="col-md-3 col-xs-12 control-label">Country *</label>
-				        <div class="col-md-6 col-xs-12">
-				          <div class="input-group">
-				            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
-				            <select name="country" class="form-control">    
-				              <option value="MALAYSIA">MALAYSIA</option>
-				              <option value="THAILAND">THAILAND</option>
-				              <option value="SINGAPORE">SINGAPORE</option>
-				              <option value="INDONESIA">INDONESIA</option>
-				            </select>
-				          </div>
-				          {{-- <span class="help-block">This is sample of text field</span> --}}
-				        </div>
-				    </div>  
+  <div class="col-md-12">
+	  <!-- START DEFAULT WIZARD -->
+    <div class="block">
+      <h4>Default Wizard</h4>
+      <form action="" method="post" role="form" class="form-horizontal">
+        <div class="wizard show-submit">
+          <ul>
+            <li>
+              <a href="#step-1">
+                <span class="stepNumber">1</span>
+                <span class="stepDesc">Step 1<br /><small>Login Information</small></span>
+              </a>
+            </li>
+            <li>
+              <a href="#step-2">
+                <span class="stepNumber">2</span>
+                <span class="stepDesc">Step 2<br /><small>Personal Information</small></span>
+              </a>
+            </li>
+            <li>
+              <a href="#step-3">
+                <span class="stepNumber">3</span>
+                <span class="stepDesc">Step 3<br /><small>Contact Information</small></span>                   
+              </a>
+            </li>
+            <li>
+              <a href="#step-4">
+                <span class="stepNumber">4</span>
+                <span class="stepDesc">Step 4<br /><small>Address Information</small></span>                   
+              </a>
+            </li>
+            <li>
+              <a href="#step-5">
+                <span class="stepNumber">5</span>
+                <span class="stepDesc">Step 5<br /><small>Bank Account Information</small></span>
+              </a>
+            </li>
+            <li>
+              <a href="#step-6">
+                <span class="stepNumber">6</span>
+                <span class="stepDesc">Step 6<br /><small>Beneficiary Info (OPTIONAL)</small></span>
+              </a>
+            </li>
+            <li>
+              <a href="#step-7">
+                <span class="stepNumber">7</span>
+                <span class="stepDesc">Step 7<br /><small>Step 7 description</small></span>                   
+              </a>
+            </li>
+            <li>
+              <a href="#step-8">
+                <span class="stepNumber">8</span>
+                <span class="stepDesc">Step 8<br /><small>Step 8 description</small></span>                   
+              </a>
+            </li>
+          </ul>
+        
+          <div id="step-1">  
+            <div class="form-group">
+			        <label class="col-md-3 col-xs-12 control-label">Country *</label>
+			        <div class="col-md-6 col-xs-12">
+			          <div class="input-group">
+			            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+			            <select name="country" class="form-control">    
+			              <option value="MALAYSIA">MALAYSIA</option>
+			              <option value="THAILAND">THAILAND</option>
+			              <option value="SINGAPORE">SINGAPORE</option>
+			              <option value="INDONESIA">INDONESIA</option>
+			            </select>
+			          </div>
+			          {{-- <span class="help-block">This is sample of text field</span> --}}
+			        </div>
+		        </div>  
 
 				    <div class="form-group">
 			        <label class="col-md-3 col-xs-12 control-label">Username *</label>
@@ -88,7 +98,7 @@
 			          {{-- <span class="help-block">This is sample of text field</span> --}}
 			        </div>
 			      </div>
-			      
+	      
 			      <div class="form-group">
 			        <label class="col-md-3 col-xs-12 control-label">Password *</label>
 			        <div class="col-md-6 col-xs-12">
@@ -109,50 +119,49 @@
 			          <span id="confirmMessage" class="confirmMessage"></span>
 			        </div>
 			      </div>
-                                                          
+          </div><!-- END Step 1--> 
 
-                </div>
-                <div id="step-2">
-                    <div class="form-group">
-				        <label class="col-md-3 col-xs-12 control-label">Type *</label>
-				        <div class="col-md-6 col-xs-12">
-				          <div class="input-group">
-				            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
-				            <select name="type" class="form-control">    
-				              <option value="PERSONAL">PERSONAL</option>
-				              <option value="BUSINESS">BUSINESS</option>
-				            </select>
-				          </div>
-				          {{-- <span class="help-block">This is sample of text field</span> --}}
-				        </div>
-				    </div> 
+          <div id="step-2">
+            <div class="form-group">
+			        <label class="col-md-3 col-xs-12 control-label">Type *</label>
+			        <div class="col-md-6 col-xs-12">
+			          <div class="input-group">
+			            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+			            <select name="type" class="form-control">    
+			              <option value="PERSONAL">PERSONAL</option>
+			              <option value="BUSINESS">BUSINESS</option>
+			            </select>
+			          </div>
+			          {{-- <span class="help-block">This is sample of text field</span> --}}
+			        </div>
+		        </div> 
 
 				    <div class="form-group">
-				        <label class="col-md-3 col-xs-12 control-label">Rank *</label>
-				        <div class="col-md-6 col-xs-12">
-				          <div class="input-group">
-				            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
-				            <select name="rank" class="form-control">
-				            @foreach($ranks as $rank)
-				              
-				              <option value="{{ $rank->name }}">{{ $rank->name }}</option>
-				              
-				            @endforeach
-				            </select>
-				          </div>
-				          {{-- <span class="help-block">This is sample of text field</span> --}}
-				        </div>
+				      <label class="col-md-3 col-xs-12 control-label">Rank *</label>
+			        <div class="col-md-6 col-xs-12">
+			          <div class="input-group">
+			            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+			            <select name="rank" class="form-control">
+			            @foreach($ranks as $rank)
+			              
+			              <option value="{{ $rank->name }}">{{ $rank->name }}</option>
+			              
+			            @endforeach
+			            </select>
+			          </div>
+			          {{-- <span class="help-block">This is sample of text field</span> --}}
+			        </div>
 				    </div>
 
 				    <div class="form-group">
-				        <label class="col-md-3 col-xs-12 control-label">Name *</label>
-				        <div class="col-md-6 col-xs-12">
-				          <div class="input-group">
-				            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-				            <input class="form-control" type="text" name="name" id="name" onchange="copyTextValue(this);" value="{{ old('name')}}">
-				          </div>
-				          {{-- <span class="help-block">This is sample of text field</span> --}}
-				        </div>
+				      <label class="col-md-3 col-xs-12 control-label">Name *</label>
+			        <div class="col-md-6 col-xs-12">
+			          <div class="input-group">
+			            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+			            <input class="form-control" type="text" name="name" id="name" onchange="copyTextValue(this);" value="{{ old('name')}}">
+			          </div>
+			          {{-- <span class="help-block">This is sample of text field</span> --}}
+			        </div>
 				    </div>
 
 				    <div class="form-group">
@@ -166,335 +175,306 @@
 				    </div>
 
 				    <div class="form-group">
-				        <label class="col-md-3 col-xs-12 control-label">Gender *</label>
-				        <div class="col-md-6 col-xs-12">
-				          <div class="input-group">
-				            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
-				            <select name="gender" class="form-control">    
-				              <option value="Male">Male</option>
-				              <option value="Female">Female</option>
-				            </select>
-				          </div>
-				          {{-- <span class="help-block">This is sample of text field</span> --}}
-				        </div>
-				    </div> 
-
-				    <div class="form-group">
-				        <label class="col-md-3 col-xs-12 control-label">Marital Status *</label>
-				        <div class="col-md-6 col-xs-12">
-				          <div class="input-group">
-				            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
-				            <select name="marital_status" class="form-control">    
-				              <option value="Male">Single</option>
-				              <option value="Female">Married</option>
-				            </select>
-				          </div>
-				          {{-- <span class="help-block">This is sample of text field</span> --}}
-				        </div>
-				    </div> 
-
-				    <div class="form-group">
-				        <label class="col-md-3 col-xs-12 control-label">Race *</label>
-				        <div class="col-md-6 col-xs-12">
-				          <div class="input-group">
-				            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
-				            <select name="race" class="form-control">    
-				              <option value="Malay">Malay</option>
-				              <option value="Chinese">Chinese</option>
-				              <option value="Indian">Indian</option>
-				              <option value="Others">Others</option>
-				            </select>
-				          </div>
-				          {{-- <span class="help-block">This is sample of text field</span> --}}
-				        </div>
-				    </div>
-
-				    <div class="form-group">
-				        <label class="col-md-3 col-xs-12 control-label">ID Type *</label>
-				        <div class="col-md-6 col-xs-12">
-				          <div class="input-group">
-				            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
-				            <select name="id_type" class="form-control">    
-				              <option value="ic">IC</option>
-				              <option value="passport">Passport</option>
-				            </select>
-				          </div>
-				          {{-- <span class="help-block">This is sample of text field</span> --}}
-				        </div>
-				    </div>
-
-				    <div class="form-group">
-				        <label class="col-md-3 col-xs-12 control-label">ID No *</label>
-				        <div class="col-md-6 col-xs-12">
-				          <div class="input-group">
-				            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
-				            <input class="form-control" type="text" name="id_no" value="{{ old('id_no') }}">
-				          </div>
-				          {{-- <span class="help-block">This is sample of text field</span> --}}
-				        </div>
-				    </div>
-
-				    <div class="form-group">
-				        <label class="col-md-3 col-xs-12 control-label">Upload ID</label>
-				        <div class="col-md-6 col-xs-12">
-				          <div class="input-group">
-				            <input type="file" multiple id="file-simple" name="id_pic" value="{{ old('id_pic') }}" />
-				          </div>
-				        </div>
-				    </div>
-				      
-				    <div class="form-group">
-				        <label class="col-md-3 col-xs-12 control-label">Introducer *</label>
-				        <div class="col-md-6 col-xs-12">
-				          <div class="input-group">
-				            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
-				            <input class="form-control" type="text" name="introducer" value="{{ Auth::guard('admin')->user()->username }}">
-				          </div>
-				          {{-- <span class="help-block">This is sample of text field</span> --}}
-				        </div>
-				    </div>     
-
-                </div>                      
-                <div id="step-3">
-                    <div class="form-group">
-			          <label class="col-md-3 col-xs-12 control-label">Mobile No *</label>
-			          <div class="col-md-6 col-xs-12">
-			            <div class="input-group">
-			              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-			              <input class="form-control" type="text" name="mobile_no" value="{{ old('mobile_no') }}">
-			            </div>
-			            {{-- <span class="help-block">This is sample of text field</span> --}}
-			          </div>
-			        </div>
-			        
-			        <div class="form-group">
-			          <label class="col-md-3 col-xs-12 control-label">Email *</label>
-			          <div class="col-md-6 col-xs-12">
-			            <div class="input-group">
-			              <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
-			              <input class="form-control" type="text" name="email" value="{{ old('email') }}">
-			            </div>
-			            {{-- <span class="help-block">This is sample of text field</span> --}}
-			          </div>
-			        </div>
-                </div>
-                <div id="step-4">
-                    <div class="form-group">
-			          <label class="col-md-3 col-xs-12 control-label">Street *</label>
-			          <div class="col-md-6 col-xs-12">
-			            <div class="input-group">
-			              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-			              <input class="form-control" type="text" name="street" value="{{ old('street') }}">
-			            </div>
-			            {{-- <span class="help-block">This is sample of text field</span> --}}
-			          </div>
-			        </div>
-
-			        <div class="form-group">
-			          <label class="col-md-3 col-xs-12 control-label">City *</label>
-			          <div class="col-md-6 col-xs-12">
-			            <div class="input-group">
-			              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-			              <input class="form-control" type="text" name="city" value="{{ old('city') }}">
-			            </div>
-			            {{-- <span class="help-block">This is sample of text field</span> --}}
-			          </div>
-			        </div>
-
-			        <div class="form-group">
-			          <label class="col-md-3 col-xs-12 control-label">Postcode *</label>
-			          <div class="col-md-6 col-xs-12">
-			            <div class="input-group">
-			              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-			              <input class="form-control" type="text" name="postcode" value="{{ old('postcode') }}">
-			            </div>
-			            {{-- <span class="help-block">This is sample of text field</span> --}}
-			          </div>
-			        </div>
-			        
-			        <div class="form-group">
-			          <label class="col-md-3 col-xs-12 control-label">State *</label>
-			          <div class="col-md-6 col-xs-12">
-			            <div class="input-group">
-			              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-			              <input class="form-control" type="text" name="state" value="{{ old('state') }}">
-			            </div>
-			            {{-- <span class="help-block">This is sample of text field</span> --}}
-			          </div>
-			        </div>  
-                </div>   
-                <div id="step-5">   
-                    <div class="form-group">
-			          <label class="col-md-3 col-xs-12 control-label">Bank *</label>
-			          <div class="col-md-6 col-xs-12">
-			            <div class="input-group">
-			              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-			              <select name="bank" class="form-control">
-			                @foreach($banks as $bank)
-			                  
-			                  <option value="{{ $bank->name }}" {{ old('bank') == $bank->name ? ' selected="selected"' : ''}}>
-			                  	{{ $bank->name }}
-			                  </option>
-			                  
-			                @endforeach
-			                </select>
-			            </div>
-			            {{-- <span class="help-block">This is sample of text field</span> --}}
-			          </div>
-			        </div>
-
-			        <div class="form-group">
-			          <label class="col-md-3 col-xs-12 control-label">Account No *</label>
-			          <div class="col-md-6 col-xs-12">
-			            <div class="input-group">
-			              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-			              <input class="form-control" type="text" name="account_no" value="{{ old('account_no') }}">
-			            </div>
-			            {{-- <span class="help-block">This is sample of text field</span> --}}
-			          </div>
-			        </div>
-
-			        <div class="form-group">
-			          <label class="col-md-3 col-xs-12 control-label">Account Holder Name *</label>
-			          <div class="col-md-6 col-xs-12">
-			            <div class="input-group">
-			              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-			              <input class="form-control" type="text" name="acc_holder_name" id="acc_holder_name" value="{{ old('acc_holder_name') }}">
-			            </div>
-			            {{-- <span class="help-block">This is sample of text field</span> --}}
-			          </div>
-			          <div class="checkbox pull-left">
-			            <label><input type="checkbox" name="check1" onchange="copyTextValue(this);"> Same As Above</label>
-			        </div>
-			        </div>
-			        
-			        
-			        <div class="form-group">
-			          <label class="col-md-3 col-xs-12 control-label">Account Type *</label>
-			          <div class="col-md-6 col-xs-12">
-			            <div class="input-group">
-			              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-			              <input class="form-control" type="text" name="account_type" value="{{ old('account_type') }}">
-			            </div>
-			            {{-- <span class="help-block">This is sample of text field</span> --}}
-			          </div>
-			        </div>  
-                </div>
-                <div id="step-6">
-                    <h4>Step 6 Beneficiary</h4>
-                    <div class="form-group">
-			          <label class="col-md-3 col-xs-12 control-label">Beneficiary Name</label>
-			          <div class="col-md-6 col-xs-12">
-			            <div class="input-group">
-			              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-			              <input class="form-control" type="text" name="beneficiary_name" value="{{ old('beneficiary_name') }}">
-			            </div>
-			            {{-- <span class="help-block">This is sample of text field</span> --}}
-			          </div>
-			        </div>
-
-			        <div class="form-group">
-			          <label class="col-md-3 col-xs-12 control-label">Relationship</label>
-			          <div class="col-md-6 col-xs-12">
-			            <div class="input-group">
-			              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-			              
-			              <select name="relationship" class="form-control">    
-			                <option value="Parent" {{ old('relationship') == 'Parent' ? ' selected="selected"' : ''}}>Parent</option>
-			                <option value="Spouse" {{ old('relationship') == 'Spouse' ? ' selected="selected"' : ''}}>Spouse</option>
-			                <option value="Sibling" {{ old('relationship') == 'Sibling' ? ' selected="selected"' : ''}}>Sibling</option>
-			                <option value="Cousin" {{ old('relationship') == 'Cousin' ? ' selected="selected"' : ''}}>Cousin</option>
-			                <option value="Nephew/Niece" {{ old('relationship') == 'Nephew/Niece' ? ' selected="selected"' : ''}}>Nephew/Niece</option>
-			                <option value="Uncle/Aunt" {{ old('relationship') == 'Uncle/Aunt' ? ' selected="selected"' : ''}}>Uncle/Aunt</option>
-			                <option value="Grandparent" {{ old('relationship') == 'Grandparent' ? ' selected="selected"' : ''}}>Grandparent</option>
-			                <option value="Grandchild" {{ old('relationship') == 'Grandchild' ? ' selected="selected"' : ''}}>Grandchild</option>
-			                <option value="Friend" {{ old('relationship') == 'Friend' ? ' selected="selected"' : ''}}>Friend</option>
-			                <option value="Others" {{ old('relationship') == 'Other' ? ' selected="selected"' : ''}}>Others</option>
+			        <label class="col-md-3 col-xs-12 control-label">Gender *</label>
+			        <div class="col-md-6 col-xs-12">
+			          <div class="input-group">
+			            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+			            <select name="gender" class="form-control">    
+			              <option value="Male">Male</option>
+			              <option value="Female">Female</option>
 			            </select>
-			            </div>
-			            {{-- <span class="help-block">This is sample of text field</span> --}}
+			          </div>
+			          {{-- <span class="help-block">This is sample of text field</span> --}}
+			        </div>
+				    </div> 
+
+				    <div class="form-group">
+			        <label class="col-md-3 col-xs-12 control-label">Marital Status *</label>
+			        <div class="col-md-6 col-xs-12">
+			          <div class="input-group">
+			            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+			            <select name="marital_status" class="form-control">    
+			              <option value="Male">Single</option>
+			              <option value="Female">Married</option>
+			            </select>
+			          </div>
+			          {{-- <span class="help-block">This is sample of text field</span> --}}
+			        </div>
+				    </div> 
+
+				    <div class="form-group">
+			        <label class="col-md-3 col-xs-12 control-label">Race *</label>
+			        <div class="col-md-6 col-xs-12">
+			          <div class="input-group">
+			            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+			            <select name="race" class="form-control">    
+			              <option value="Malay">Malay</option>
+			              <option value="Chinese">Chinese</option>
+			              <option value="Indian">Indian</option>
+			              <option value="Others">Others</option>
+			            </select>
+			          </div>
+			          {{-- <span class="help-block">This is sample of text field</span> --}}
+			        </div>
+				    </div>
+
+  			    <div class="form-group">
+			        <label class="col-md-3 col-xs-12 control-label">ID Type *</label>
+			        <div class="col-md-6 col-xs-12">
+			          <div class="input-group">
+			            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+			            <select name="id_type" class="form-control">    
+			              <option value="ic">IC</option>
+			              <option value="passport">Passport</option>
+			            </select>
+			          </div>
+			          {{-- <span class="help-block">This is sample of text field</span> --}}
+			        </div>
+  			    </div>
+
+				    <div class="form-group">
+			        <label class="col-md-3 col-xs-12 control-label">ID No *</label>
+			        <div class="col-md-6 col-xs-12">
+			          <div class="input-group">
+			            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+			            <input class="form-control" type="text" name="id_no" value="{{ old('id_no') }}">
+			          </div>
+			          {{-- <span class="help-block">This is sample of text field</span> --}}
+			        </div>
+				    </div>
+
+				    <div class="form-group">
+			        <label class="col-md-3 col-xs-12 control-label">Upload ID</label>
+			        <div class="col-md-6 col-xs-12">
+			          <div class="input-group">
+			            <input type="file" multiple id="file-simple" name="id_pic" value="{{ old('id_pic') }}" />
 			          </div>
 			        </div>
-
-			        <div class="form-group">
-			          <label class="col-md-3 col-xs-12 control-label">Address</label>
-			          <div class="col-md-6 col-xs-12">
-			            <div class="input-group">
-			              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-			              <input class="form-control" type="text" name="beneficiary_address" value="{{ old('beneficiary_address') }}">
-			            </div>
-			            {{-- <span class="help-block">This is sample of text field</span> --}}
+				    </div>
+		      
+				    <div class="form-group">
+			        <label class="col-md-3 col-xs-12 control-label">Introducer *</label>
+			        <div class="col-md-6 col-xs-12">
+			          <div class="input-group">
+			            <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+			            <input class="form-control" type="text" name="introducer" value="{{ Auth::guard('admin')->user()->username }}">
 			          </div>
+			          {{-- <span class="help-block">This is sample of text field</span> --}}
 			        </div>
-			        
-			        <div class="form-group">
-			          <label class="col-md-3 col-xs-12 control-label">Beneficiary Mobile No</label>
-			          <div class="col-md-6 col-xs-12">
-			            <div class="input-group">
-			              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-			              <input class="form-control" type="text" name="beneficiary_mobile_no" value="{{ old('beneficiary_mobile_no') }}">
-			            </div>
-			            {{-- <span class="help-block">This is sample of text field</span> --}}
-			          </div>
-			        </div>  
-			     
-                </div>                      
-                <div id="step-7">
-                    <div class='row'>
-                    	<table>
-                    		<tr>
-                    			<th>#</th>
-                    			<th>Product</th>
-                    			<th>Price</th>
-                    			<th>Quantity</th>
-                    			<th>Sub-Total</th>
-                    		</tr>
-                    		@php $i = 0; @endphp
-                			@foreach($products as $product)
-                			<tr>
-	                			<td><input type="checkbox" id="box{{$product->id}} name="product[]" value="{{$product->id}}"></td>
-								<td>{{$product->name}}</td>
-								<td><input type="text" id="price{{$product->id}}" value="{{$product->wm_price}}" disabled></td>
-								<td><input type="text" id="qty{{$product->id}}" name="quantity[]" value="0" onblur="calculate()"> </td>
-								<td><input type="text" id="subtotal{{$product->id}}" name="subtotal[]" data-ac="(#price{{$product->id}} * #qty{{$product->id}})"></td>
-							</tr>
-				    		@endforeach
-                    		
-                    	</table>
+				    </div>     
+          </div><!-- END Step 2-->
 
-                    	<table>
-                    		<tr>
-                    			<th>#</th>
-                    			<th>Package</th>
-                    			<th>Price</th>
-                    			<th>Quantity</th>
-                    			<th>Sub-Total</th>
-                    		</tr>
-                    		@php $i = 0; @endphp
-                			@foreach($packages as $package)
-                			<tr>
-	                			<td><input type="checkbox" id="box{{$product->id}}" name="product[]" value="{{$product->id}}"></td>
-								<td>{{$product->name}}</td>
-								<td><input type="text" id="price{{$product->id}}" value="{{$product->wm_price}}" disabled></td>
-								<td> <input type="text" id="qty{{$product->id}}" class="qty" name="quantity[]" value="0" onblur="calculate()"> </td>
-								<td><input type="text" id="subtotal{{$product->id}}" name="subtotal[]" data-ac="(#price{{$product->id}} * #qty{{$product->id}})"></td>
-							</tr>
-				    		@endforeach
-                    		
-                    	</table>
-						
-					</div>
-					
-                </div>
-                <div id="step-8">
-                    <h4>Step 8 Content</h4>
-                    <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
-                </div>   
+          <div id="step-3">
+            <div class="form-group">
+		          <label class="col-md-3 col-xs-12 control-label">Mobile No *</label>
+		          <div class="col-md-6 col-xs-12">
+		            <div class="input-group">
+		              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+		              <input class="form-control" type="text" name="mobile_no" value="{{ old('mobile_no') }}">
+		            </div>
+		            {{-- <span class="help-block">This is sample of text field</span> --}}
+		          </div>
+		        </div>
+	        
+		        <div class="form-group">
+		          <label class="col-md-3 col-xs-12 control-label">Email *</label>
+		          <div class="col-md-6 col-xs-12">
+		            <div class="input-group">
+		              <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+		              <input class="form-control" type="text" name="email" value="{{ old('email') }}">
+		            </div>
+		            {{-- <span class="help-block">This is sample of text field</span> --}}
+		          </div>
+		        </div>
+          </div><!-- END Step 3-->
+
+          <div id="step-4">
+            <div class="form-group">
+		          <label class="col-md-3 col-xs-12 control-label">Street *</label>
+		          <div class="col-md-6 col-xs-12">
+		            <div class="input-group">
+		              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+		              <input class="form-control" type="text" name="street" value="{{ old('street') }}">
+		            </div>
+		            {{-- <span class="help-block">This is sample of text field</span> --}}
+		          </div>
+	          </div>
+
+		        <div class="form-group">
+		          <label class="col-md-3 col-xs-12 control-label">City *</label>
+		          <div class="col-md-6 col-xs-12">
+		            <div class="input-group">
+		              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+		              <input class="form-control" type="text" name="city" value="{{ old('city') }}">
+		            </div>
+		            {{-- <span class="help-block">This is sample of text field</span> --}}
+		          </div>
+		        </div>
+
+		        <div class="form-group">
+		          <label class="col-md-3 col-xs-12 control-label">Postcode *</label>
+		          <div class="col-md-6 col-xs-12">
+		            <div class="input-group">
+		              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+		              <input class="form-control" type="text" name="postcode" value="{{ old('postcode') }}">
+		            </div>
+		            {{-- <span class="help-block">This is sample of text field</span> --}}
+		          </div>
+		        </div>
+	        
+		        <div class="form-group">
+		          <label class="col-md-3 col-xs-12 control-label">State *</label>
+		          <div class="col-md-6 col-xs-12">
+		            <div class="input-group">
+		              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+		              <input class="form-control" type="text" name="state" value="{{ old('state') }}">
+		            </div>
+		            {{-- <span class="help-block">This is sample of text field</span> --}}
+		          </div>
+		        </div>  
+          </div><!-- END Step 4--> 
+
+          <div id="step-5">   
+            <div class="form-group">
+		          <label class="col-md-3 col-xs-12 control-label">Bank *</label>
+		          <div class="col-md-6 col-xs-12">
+		            <div class="input-group">
+		              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+		              <select name="bank" class="form-control">
+		                @foreach($banks as $bank)
+		                  
+		                  <option value="{{ $bank->name }}" {{ old('bank') == $bank->name ? ' selected="selected"' : ''}}>
+		                  	{{ $bank->name }}
+		                  </option>
+		                  
+		                @endforeach
+		                </select>
+		            </div>
+		            {{-- <span class="help-block">This is sample of text field</span> --}}
+		          </div>
+		        </div>
+
+		        <div class="form-group">
+		          <label class="col-md-3 col-xs-12 control-label">Account No *</label>
+		          <div class="col-md-6 col-xs-12">
+		            <div class="input-group">
+		              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+		              <input class="form-control" type="text" name="account_no" value="{{ old('account_no') }}">
+		            </div>
+		            {{-- <span class="help-block">This is sample of text field</span> --}}
+		          </div>
+		        </div>
+
+		        <div class="form-group">
+		          <label class="col-md-3 col-xs-12 control-label">Account Holder Name *</label>
+		          <div class="col-md-6 col-xs-12">
+		            <div class="input-group">
+		              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+		              <input class="form-control" type="text" name="acc_holder_name" id="acc_holder_name" value="{{ old('acc_holder_name') }}">
+		            </div>
+		            {{-- <span class="help-block">This is sample of text field</span> --}}
+		          </div>
+		          <div class="checkbox pull-left">
+		            <label><input type="checkbox" name="check1" onchange="copyTextValue(this);"> Same As Above</label>
+		          </div>
+		        </div>
+	        
+		        <div class="form-group">
+		          <label class="col-md-3 col-xs-12 control-label">Account Type *</label>
+		          <div class="col-md-6 col-xs-12">
+		            <div class="input-group">
+		              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+		              <input class="form-control" type="text" name="account_type" value="{{ old('account_type') }}">
+		            </div>
+		            {{-- <span class="help-block">This is sample of text field</span> --}}
+		          </div>
+		        </div>  
+          </div><!-- END Step 5-->
+
+          <div id="step-6">
+            <h4>Step 6 Beneficiary</h4>
+            <div class="form-group">
+		          <label class="col-md-3 col-xs-12 control-label">Beneficiary Name</label>
+		          <div class="col-md-6 col-xs-12">
+		            <div class="input-group">
+		              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+		              <input class="form-control" type="text" name="beneficiary_name" value="{{ old('beneficiary_name') }}">
+		            </div>
+		            {{-- <span class="help-block">This is sample of text field</span> --}}
+		          </div>
             </div>
-        	</form>
-        </div>                                       
-        <!-- END DEFAULT WIZARD -->
-	</div><!--END col-md-12 -->
+
+		        <div class="form-group">
+		          <label class="col-md-3 col-xs-12 control-label">Relationship</label>
+		          <div class="col-md-6 col-xs-12">
+		            <div class="input-group">
+		              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+		              <select name="relationship" class="form-control">    
+		                <option value="Parent" {{ old('relationship') == 'Parent' ? ' selected="selected"' : ''}}>Parent</option>
+		                <option value="Spouse" {{ old('relationship') == 'Spouse' ? ' selected="selected"' : ''}}>Spouse</option>
+		                <option value="Sibling" {{ old('relationship') == 'Sibling' ? ' selected="selected"' : ''}}>Sibling</option>
+		                <option value="Cousin" {{ old('relationship') == 'Cousin' ? ' selected="selected"' : ''}}>Cousin</option>
+		                <option value="Nephew/Niece" {{ old('relationship') == 'Nephew/Niece' ? ' selected="selected"' : ''}}>Nephew/Niece</option>
+		                <option value="Uncle/Aunt" {{ old('relationship') == 'Uncle/Aunt' ? ' selected="selected"' : ''}}>Uncle/Aunt</option>
+		                <option value="Grandparent" {{ old('relationship') == 'Grandparent' ? ' selected="selected"' : ''}}>Grandparent</option>
+		                <option value="Grandchild" {{ old('relationship') == 'Grandchild' ? ' selected="selected"' : ''}}>Grandchild</option>
+		                <option value="Friend" {{ old('relationship') == 'Friend' ? ' selected="selected"' : ''}}>Friend</option>
+		                <option value="Others" {{ old('relationship') == 'Other' ? ' selected="selected"' : ''}}>Others</option>
+		              </select>
+		            </div>
+		            {{-- <span class="help-block">This is sample of text field</span> --}}
+		          </div>
+		        </div>
+
+		        <div class="form-group">
+		          <label class="col-md-3 col-xs-12 control-label">Address</label>
+		          <div class="col-md-6 col-xs-12">
+		            <div class="input-group">
+		              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+		              <input class="form-control" type="text" name="beneficiary_address" value="{{ old('beneficiary_address') }}">
+		            </div>
+		            {{-- <span class="help-block">This is sample of text field</span> --}}
+		          </div>
+		        </div>
+	        
+		        <div class="form-group">
+		          <label class="col-md-3 col-xs-12 control-label">Beneficiary Mobile No</label>
+		          <div class="col-md-6 col-xs-12">
+		            <div class="input-group">
+		              <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+		              <input class="form-control" type="text" name="beneficiary_mobile_no" value="{{ old('beneficiary_mobile_no') }}">
+		            </div>
+		            {{-- <span class="help-block">This is sample of text field</span> --}}
+		          </div>
+		        </div>  
+          </div><!-- END Step 6-->  
+
+          <div id="step-7">
+            <div class='row'>
+            	
+            		@php $i = 0; @endphp
+          			@foreach($products as $product)
+                    <input type="checkbox">
+                    <div class="pid-{{$product->id}}">  
+                      <input type="text" id="price{{$product->id}}" value="{{$product->wm_price}}" disabled>
+                      <input type="text" id="qty{{$product->id}}"  name="quantity[]" value="0" onblur="calculate()">
+                      <input type="text" id="subtotal{{$product->id}}" name="subtotal[]" data-ac="(#price{{$product->id}} * #qty{{$product->id}})" >
+                    </div><br/>
+                  
+	    		      @endforeach	
+              
+		        </div>
+          </div><!-- END Step 7-->
+
+          <div id="step-8">
+            <h4>Step 8 Content</h4>
+            <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
+          </div><!-- END Step 8-->   
+        </div>
+  	  </form>
+    </div>                                       
+    <!-- END DEFAULT WIZARD -->
+  </div><!--END col-md-12 -->
 </div><!--END ROW -->
 @endsection
 {{-- page level scripts --}}
