@@ -22,9 +22,6 @@
         <!-- CSS INCLUDE -->        
         <link rel="stylesheet" type="text/css" id="theme" href="{{ asset('themes/Joli/css/theme-default.css') }}"/>
         <!-- EOF CSS INCLUDE -->
-
-        @yield('header_styles')
-        
         <style type='text/css'>
         iframe.goog-te-banner-frame{ display: none !important;}
         </style>
@@ -37,6 +34,10 @@
         .goog-logo-link {display:none !important;} 
         .goog-te-gadget{color: transparent !important;}
         </style>
+
+        @yield('header_styles')
+        
+        
     </head>
     <body>
         <!-- START PAGE CONTAINER -->

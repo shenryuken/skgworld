@@ -13,6 +13,7 @@ use App\Admin;
 use App\User;
 use App\Profile;
 use App\Product;
+use App\Package;
 use App\Referral;
 use App\Role;
 use App\Sale;
@@ -135,8 +136,9 @@ class AdminController extends Controller
         $ranks  = Rank::all();
         $banks  = Bank::all();
         $products = Product::all();
+        $packages = Package::all();
 
-        return view('admin.register-member', compact('ranks', 'banks', 'products'));
+        return view('admin.register-member', compact('ranks', 'banks', 'products', 'packages'));
     }
 
     public function registerMember(Request $request)
@@ -231,13 +233,15 @@ class AdminController extends Controller
                 $user->profile()->save($profile);
             });
 
-            //profile, bank,
-
-            $user->rank()->associate($rank);
-            $user->save();
-
            
+
             if ($user) {
+
+                 //profile, bank,
+
+                $user->rank()->associate($rank);
+                $user->save();
+                
                 if($rank->id == 4)
                 {
                     $active_do = new ActiveDo;
