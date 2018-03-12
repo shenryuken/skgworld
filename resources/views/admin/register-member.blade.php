@@ -1,16 +1,18 @@
 @extends('layouts.joli.app')
 {{-- Page title --}}
 
-@section('header')
+@section('header_styles')
 <style type="text/css">
-  /* Default State */
-  input[type=checkbox] + div[class*="pid-"] input { display: none; }
+div.checkbox {padding-top:10px;}
+input[type=checkbox] + div {display:inline; }
 
-  /* Toggled State */
-  input[type=checkbox]:checked + div[class*="pid-"] { display:inline }
+input[type=checkbox] + div[class*="pid-"]  input[target=hidden] { visibility:hidden;}
+
+/* Toggled State */
+input[type=checkbox]:checked + div[class*="pid-"]  input[target=hidden]{
+   visibility:visible;
 </style>
-@parent
-@stop
+@endsection
 <?php $page_title = 'Register New Member'; ?>
 @section('content')
 <div class="row">
@@ -451,16 +453,18 @@
 
           <div id="step-7">
             <div class='row'>
-            	
+            	  <h2>Products</h2>
             		@php $i = 0; @endphp
           			@foreach($products as $product)
+                  <div class="checkbox">
                     <input type="checkbox">
                     <div class="pid-{{$product->id}}">  
+                      <input type="text" value="{{$product->name}}" disabled>
                       <input type="text" id="price{{$product->id}}" value="{{$product->wm_price}}" disabled>
-                      <input type="text" id="qty{{$product->id}}"  name="quantity[]" value="0" onblur="calculate()">
-                      <input type="text" id="subtotal{{$product->id}}" name="subtotal[]" data-ac="(#price{{$product->id}} * #qty{{$product->id}})" >
+                      <input type="text" id="qty{{$product->id}}"  target="hidden" name="quantity[]" value="0" onblur="calculate()">
+                      <input type="text" id="subtotal{{$product->id}}" target="hidden" name="subtotal[]" data-ac="(#price{{$product->id}} * #qty{{$product->id}})" >
                     </div><br/>
-                  
+                  </div>
 	    		      @endforeach	
               
 		        </div>
