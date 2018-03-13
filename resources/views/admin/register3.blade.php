@@ -32,19 +32,48 @@ input[type=checkbox]:checked + div[class*="pid-"]  input[target=hidden]{
 						<li>
 							<a href="#step-2">
 								<span class="stepNumber">2</span>
-								<span class="stepDesc">Step 2<br /><small>Select Products or Pakages</small></span>
+								<span class="stepDesc">Step 2<br /><small>Personal Information</small></span>
 							</a>
 						</li>
 						<li>
 							<a href="#step-3">
 								<span class="stepNumber">3</span>
-								<span class="stepDesc">Step 3<br /><small>Payment Information</small></span>
+								<span class="stepDesc">Step 3<br /><small>Contact Information</small></span>
+							</a>
+						</li>
+						<li>
+							<a href="#step-4">
+								<span class="stepNumber">4</span>
+								<span class="stepDesc">Step 4<br /><small>Address Information</small></span>
+							</a>
+						</li>
+						<li>
+							<a href="#step-5">
+								<span class="stepNumber">5</span>
+								<span class="stepDesc">Step 5<br /><small>Bank Account Information</small></span>
+							</a>
+						</li>
+						<li>
+							<a href="#step-6">
+								<span class="stepNumber">6</span>
+								<span class="stepDesc">Step 6<br /><small>Beneficiary Info (OPTIONAL)</small></span>
+							</a>
+						</li>
+						<li>
+							<a href="#step-7">
+								<span class="stepNumber">7</span>
+								<span class="stepDesc">Step 7<br /><small>Step 7 description</small></span>
+							</a>
+						</li>
+						<li>
+							<a href="#step-8">
+								<span class="stepNumber">8</span>
+								<span class="stepDesc">Step 8<br /><small>Step 8 description</small></span>
 							</a>
 						</li>
 					</ul>
 					
 					<div id="step-1">
-						<h2>Login Info</h2>
 						<div class="form-group">
 							<label class="col-md-3 col-xs-12 control-label">Country *</label>
 							<div class="col-md-6 col-xs-12">
@@ -90,8 +119,8 @@ input[type=checkbox]:checked + div[class*="pid-"]  input[target=hidden]{
 								<span id="confirmMessage" class="confirmMessage"></span>
 							</div>
 						</div>
-
-						<h2>Personal Info</h2>
+					</div><!-- END Step 1-->
+					<div id="step-2">
 						<div class="form-group">
 							<label class="col-md-3 col-xs-12 control-label">Type *</label>
 							<div class="col-md-6 col-xs-12">
@@ -223,8 +252,8 @@ input[type=checkbox]:checked + div[class*="pid-"]  input[target=hidden]{
 								{{-- <span class="help-block">This is sample of text field</span> --}}
 							</div>
 						</div>
-
-						<h2>Contact Info</h2>
+					</div><!-- END Step 2-->
+					<div id="step-3">
 						<div class="form-group">
 							<label class="col-md-3 col-xs-12 control-label">Mobile No *</label>
 							<div class="col-md-6 col-xs-12">
@@ -246,8 +275,8 @@ input[type=checkbox]:checked + div[class*="pid-"]  input[target=hidden]{
 								{{-- <span class="help-block">This is sample of text field</span> --}}
 							</div>
 						</div>
-
-						<h2>Billing Address</h2>
+					</div><!-- END Step 3-->
+					<div id="step-4">
 						<div class="form-group">
 							<label class="col-md-3 col-xs-12 control-label">Street *</label>
 							<div class="col-md-6 col-xs-12">
@@ -289,8 +318,8 @@ input[type=checkbox]:checked + div[class*="pid-"]  input[target=hidden]{
 								{{-- <span class="help-block">This is sample of text field</span> --}}
 							</div>
 						</div>
-
-						<h2>Account Info</h2>
+					</div><!-- END Step 4-->
+					<div id="step-5">
 						<div class="form-group">
 							<label class="col-md-3 col-xs-12 control-label">Bank *</label>
 							<div class="col-md-6 col-xs-12">
@@ -343,8 +372,9 @@ input[type=checkbox]:checked + div[class*="pid-"]  input[target=hidden]{
 								{{-- <span class="help-block">This is sample of text field</span> --}}
 							</div>
 						</div>
-
-						<h2>Step 6 Beneficiary</h2>
+					</div><!-- END Step 5-->
+					<div id="step-6">
+						<h4>Step 6 Beneficiary</h4>
 						<div class="form-group">
 							<label class="col-md-3 col-xs-12 control-label">Beneficiary Name</label>
 							<div class="col-md-6 col-xs-12">
@@ -397,14 +427,14 @@ input[type=checkbox]:checked + div[class*="pid-"]  input[target=hidden]{
 								{{-- <span class="help-block">This is sample of text field</span> --}}
 							</div>
 						</div>
-					</div><!-- END Step 1-->
-					<div id="step-2">
+					</div><!-- END Step 6-->
+					<div id="step-7">
 						<div class='row' style="padding-left:150px; ">
 							<h2>Products</h2>
 							@php $i = 0; @endphp
 							@foreach($products as $product)
 							<div class="checkbox">
-								<input type="checkbox" value="{{$product->id}}" name="pid[]">
+								<input type="checkbox">
 								<div class="pid-{{$product->id}}">
 									<input type="text" value="{{$product->name}}" disabled>
 									<input type="text" id="price{{$product->id}}" value="{{$product->wm_price}}" disabled>
@@ -428,8 +458,11 @@ input[type=checkbox]:checked + div[class*="pid-"]  input[target=hidden]{
 							</div>
 							@endforeach	
 						</div>
-					</div><!-- END Step 2-->
-					<div id="step-3">
+					</div><!-- END Step 7-->
+					<div id="step-8">
+						<h4>Step 8 Content</h4>
+						<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
+					</div><!-- END Step 8-->
 				</div>
 			</form>
 		</div>
