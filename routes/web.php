@@ -66,10 +66,10 @@ Route::prefix('admin')->group(function (){
 	Route::get('/password/reset/{token}', 'Auth\AdminResetPasswordController@showResetForm')->name('admin.password.reset');
 
 
-	Route::get('/register-member', 'AdminController@registrationMemberForm');
-  	Route::post('/register-member', 'AdminController@registerMember');
+	// Route::get('/register-member', 'AdminController@registrationMemberForm');
+ //  	Route::post('/register-member', 'AdminController@registerMember');
 
-  	Route::get('admin/firstTimePurchaseRegistration', 'AdminController@firstTimePurchaseRegistration');
+ //  	Route::get('admin/firstTimePurchaseRegistration', 'AdminController@firstTimePurchaseRegistration');
 
   Route::get('/register-staff', 'AdminController@registrationStaffForm');
   Route::post('/register-staff', 'AdminController@registerStaff');
@@ -90,6 +90,12 @@ Route::prefix('admin')->group(function (){
 	Route::post('/revokerole', 'AdminController@postRevokeRole');
 	Route::get('/lists', 'AdminController@index');
 });
+
+//Register Route
+Route::get('admin/register-member', 'RegisterMemberController@registrationMemberForm');
+Route::post('/register-member', 'RegisterMemberController@registerMember');
+
+Route::get('/firstTimePurchaseRegistration', 'RegisterMemberController@firstTimePurchaseRegistration');
 
 //Route::resource('accounts', 'AccountController');
 Route::get('mywallet', 'WalletController@mywallet');
