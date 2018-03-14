@@ -15,12 +15,32 @@ input[type=checkbox]:checked + div[class*="pid-"]  input[target=hidden]{
 @endsection
 <?php $page_title = 'Register New Member'; ?>
 @section('content')
+@if (count($errors) > 0)
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+  @endif   
+@if ($message = Session::get('success'))
+    <div class="alert alert-success">
+        <p>{{ $message }}</p>
+    </div>
+  @endif
+  @if ($message = Session::get('fail'))
+    <div class="alert alert-danger">
+        <p>{{ $message }}</p>
+    </div>
+  @endif            
 <div class="row">
 	<div class="col-md-12">
 		<!-- START DEFAULT WIZARD -->
 		<div class="block">
 			<h4>Default Wizard</h4>
-			<form action="" method="post" role="form" class="form-horizontal">
+			<form action="{{ url('register-member') }}" method="post" role="form" class="form-horizontal" enctype="multipart/form-data">
+				{{ csrf_field() }}
 				<div class="wizard show-submit">
 					<ul>
 						<li>
