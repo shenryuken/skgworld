@@ -95,7 +95,7 @@ Route::prefix('admin')->group(function (){
 Route::get('admin/register-member', 'RegisterMemberController@registrationMemberForm');
 Route::post('/register-member', 'RegisterMemberController@registerMember');
 
-Route::get('/firstTimePurchaseRegistration', 'RegisterMemberController@firstTimePurchaseRegistration');
+Route::get('/admin/firstTimePurchaseRegistration', 'RegisterMemberController@firstTimePurchaseRegistration')->name('firstTimePurchaseRegistration');
 
 //Route::resource('accounts', 'AccountController');
 Route::get('mywallet', 'WalletController@mywallet');

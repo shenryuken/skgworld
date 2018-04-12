@@ -75,14 +75,16 @@ class ShopController extends Controller
         if($itemType == 'product')
         {
             $product = Product::find($request->id);
-            Cart::add($product->id, 'Product: '.$product->name, $quantity, $product->wm_price);
+            $addtocart = Cart::add($product->id, 'Product: '.$product->name, $quantity, $product->wm_price);
 
         } else {
             $package = Package::find($request->id);
-            Cart::add($package->id, 'Package: '.$package->name, $quantity, $package->wm_price);
+            $addtocart = Cart::add($package->id, 'Package: '.$package->name, $quantity, $package->wm_price);
         }
 
         return redirect()->back();
+        //return response()->json($addtocart);
+
     }
 
     public function updateCart(Request $request, $id)

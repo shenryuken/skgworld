@@ -136,6 +136,7 @@ function googleTranslateElementInit() {
         <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins.js') }}"></script>        
         <script type="text/javascript" src="{{ asset('themes/Joli/js/actions.js') }}"></script>        
         <script type="text/javascript" src="{{ asset('themes/Joli/js/dashboard_chart.js') }}"></script> 
+        <script type="text/javascript" src="{{ asset('js/proajax.js')}}"></script></s>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->         
     </body>
