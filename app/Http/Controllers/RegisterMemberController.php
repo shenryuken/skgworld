@@ -27,6 +27,8 @@ use App\Rank;
 use App\ActiveDo;
 use App\ActiveSdo;
 use App\Bank;
+use App\NewUser;
+use App\NewProfile;
 
 use Validator;
 use Session;
@@ -107,7 +109,7 @@ class RegisterMemberController extends Controller
 
         if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
         {
-            $user = new User;
+            $user = new NewUser;
             $user->username   = $request->username;
             $user->password   = bcrypt($request->password);
             $user->security_code = bcrypt($request->password); 
@@ -116,10 +118,10 @@ class RegisterMemberController extends Controller
             $user->mobile_no  = $request->mobile_no;
             $user->introducer = $request->introducer;
             $user->rank_id    = $rank->id;
-            //$user->save();
-            Session::put('user',$user);
+            $user->save();
+            // Session::put('user',$user);
 
-            $profile = new Profile;     
+            $profile = new NewProfile;     
             $profile->full_name = $request->name;
             $profile->dob       = $request->dob;
             $profile->gender    = $request->gender;
@@ -133,26 +135,34 @@ class RegisterMemberController extends Controller
             $profile->state     = $request->state;
             $profile->country   = $request->country;
             $profile->contact_no    = $request->mobile_no;
-            //$user->profile()->save($profile);
-            Session::put('profile',$profile);
+            $user->newprofile()->save($profile);
+            // Session::put('profile',$profile);
 
-            $pids = $request->pid;
-            $chck = 0;
+            // $pids = $request->pid;
+            // $chck = 0;
 
-            foreach($pids as $pid)
-            {
-            	$product = Product::find($pid);
-            	Cart::add($product->id, 'Product: '.$product->name, $quantity, $product->wm_price);
-            }
+            // foreach($pids as $pid)
+            // {
+            // 	$product = Product::find($pid);
+            // 	Cart::add($product->id, 'Product: '.$product->name, $quantity, $product->wm_price);
+            // }
 
-            return view('firstTimePurchaseRegistration', compact('user'));
+            //return view('admin.firstTimePurchaseRegistration', compact('user'));
+            return redirect()->route('firstTimePurchaseRegistration');
         }
-        session()->forget('user');
-        session()->forget('profile');
+        // session()->forget('user');
+        // session()->forget('profile');
 
         return back()->withInput()
                      ->with('fail', 'Failed to register! Please Check Your Security Code Is Correct Or Try Again. ');
     }
 
+    public function firstTimePurchaseRegistration()
+    {
+        $products = Product::all();
+        $packages = Package::all();
+
+        return view('admin.firstTimePurchaseRegistration', compact('products', 'packages'));
+    }
             
 }
