@@ -147,9 +147,12 @@ Route::get('shop/agent-store/{id}', 'ShopController@agentStore');
 Route::post('shop/addToCart', 'ShopController@addToCart');
 Route::put('shop/cart/update/{id}', 'ShopController@updateCart')->name('update.cart');
 Route::get('shop/cart', 'ShopController@cart');
+Route::get('shop/first-cart', 'ShopController@firstCart');
 Route::get('shop/cart/{id}', 'ShopController@agentStoreCart');
+Route::delete('shop/remove/{pid}', 'ShopController@removeFromCart');
 Route::get('shop/checkout', 'ShopController@checkout');
 Route::get('shop/emptyCart', 'ShopController@emptyCart');
+
 
 
 /*
