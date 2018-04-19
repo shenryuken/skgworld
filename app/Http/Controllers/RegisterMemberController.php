@@ -119,7 +119,7 @@ class RegisterMemberController extends Controller
             $user->introducer = $request->introducer;
             $user->rank_id    = $rank->id;
             $user->save();
-            // Session::put('user',$user);
+            Session::put('uid',$user->id);
 
             $profile = new NewProfile;     
             $profile->full_name = $request->name;
@@ -148,7 +148,7 @@ class RegisterMemberController extends Controller
             // }
 
             //return view('admin.firstTimePurchaseRegistration', compact('user'));
-            return redirect()->route('firstTimePurchaseRegistration');
+            return redirect()->route('firstTimePurchaseRegistration', compact('user'));
         }
         // session()->forget('user');
         // session()->forget('profile');

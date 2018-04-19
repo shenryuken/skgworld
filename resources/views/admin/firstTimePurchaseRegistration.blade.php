@@ -1,7 +1,19 @@
 @extends('layouts.joli.app')
 <?php $page_title = 'Register New Member'; ?>
 @section('content')
-
+<div class="row">
+    <div class="col-lg-12" style="">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h3>Products List</h3>
+              <a href="{{ url('shop/first-cart')}}">
+              <i class="fa fa-shopping-cart"></i>
+              <span class="label label-success">{{ Cart::count()}}</span>
+            </a>
+            </div>
+        </div>
+    </div>
+</div>
 <div class='row'>
 	@foreach($products as $product)
 	<div class="col-md-3">

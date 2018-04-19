@@ -90,20 +90,25 @@ class ShopController extends Controller
     public function updateCart(Request $request, $id)
     {
         $rowId = $id;
-        Cart::update($rowId, $request->qty);
+        $cart  = Cart::update($rowId, $request->qty);
 
-        return back();
+        //return redirect()->back();
+        return response()->json($cart);
     }
 
     public function checkout()
     {   
-        //$cust_address = 
         return view('shops.checkout');
     }
 
     public function cart()
     {
         return view('shops.cart');
+    }
+
+    public function firstCart()//for first purchase upon registration
+    {
+        return view('shops.first-cart');
     }
 
     public function agentStoreCart($id)
@@ -115,6 +120,12 @@ class ShopController extends Controller
     {
         Cart::destroy();
 
+        return redirect()->back();
+    }
+
+    public function removeFromCart($id)
+    {
+        $cart = Cart::remove($id);
         return redirect()->back();
     }
 
