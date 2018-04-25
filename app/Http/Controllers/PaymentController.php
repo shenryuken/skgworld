@@ -163,8 +163,6 @@ class PaymentController extends Controller
         $total_pv         = $this->getTotalPv();
         $total_rmvp       = $this->getTotalRmvp(); 
 
-        $createInvoice    = $this->createInvoice($input['user_id'], $input['agent_user_id']);
-
         if($data['payment_status'] == 'Fully Paid')
         {
             $order_status = 'New Order';
@@ -174,9 +172,13 @@ class PaymentController extends Controller
             $order_status = 'Pending';
         }
 
+        $invoice    = $this->createInvoice($input['user_id'], $input['agent_user_id'], $data);
+        $order      = $this->addNewOrder($input['user_id'], $input['agent_user_id'], $data['prev_url'], $invoice, $order_status);
+        
         if(isset($input['agent_user_id']) && $input['agent_user_id'] != 0)
         {
-            $new_order_no = $this->createOrder($input['user_id'], $input['agent_user_id'], $data['prev_url']);
+            $new_order_no = $this->getNewOrderNo($input['user_id'], $input['agent_user_id'], $data['prev_url']);
+            $invoice    = $this->createInvoice($input['user_id'], $input['agent_user_id'], $data);
 
             $order = new AgentOrder;
             $order->user_id     = $input['user_id'];
@@ -196,7 +198,7 @@ class PaymentController extends Controller
         } 
         else
         {
-            $new_order_no = $this->createOrder($input['user_id'], $input['agent_user_id'], $data['prev_url']);
+            $new_order_no = $this->getNewOrderNo($input['user_id'], $input['agent_user_id'], $data['prev_url']);
 
             $order = new Order;
             $order->user_id     = $input['user_id'];
@@ -445,7 +447,7 @@ class PaymentController extends Controller
 
         Cart::destroy();
 
-        return $payment;
+        // return $payment;
     }
 
     public function checkBalance($data)
@@ -503,14 +505,14 @@ class PaymentController extends Controller
         return $agent_invoice_no = AgentInvoice::max('invoice_no');
     }
 
-    public function createInvoice($user_id, $agent_id == null)
+    public function createInvoice($user_id, $agent_id = null, $data)
     {
         if($agent_id != NULL || $agent_id != '')
         {
             $invoice = new AgentInvoice;
-            $invoice->agent_id      = $input['agent_user_id'];
-            $invoice->invoice_no    = $this->getLastAgentInvoiceNo();//$input['invoice_no'];
-            $invoice->user_id       = $input['user_id'];//customer id
+            $invoice->agent_id      = $agent_id;
+            $invoice->invoice_no    = uniqid();//$this->getLastAgentInvoiceNo();//$input['invoice_no'];
+            $invoice->user_id       = $user_id;//customer id
             $invoice->total         = Cart::total();
             $invoice->delivery_cost = 10;
             $invoice->status        = $data['payment_status'];
@@ -518,9 +520,9 @@ class PaymentController extends Controller
             $invoice->save();
 
             $payment = new AgentPayment;
-            $payment->agent_id      = $input['agent_user_id'];
+            $payment->agent_id      = $agent_id;
             $payment->invoice_id    = $invoice->id;
-            $payment->cash          = $input['cash'];
+            $payment->cash          = 'cash';
             $payment->voucher       = $data['voucher_value'];
             $payment->status        = $data['payment_status'];
             $payment->payment_type  = $data['payment_type'];
@@ -530,7 +532,7 @@ class PaymentController extends Controller
         {
             $invoice = new Invoice;
             $invoice->invoice_no    = $this->getLastInvoiceNo() + 1;
-            $invoice->user_id       = $input['user_id'];
+            $invoice->user_id       = $user_id;
             $invoice->total         = Cart::total();
             $invoice->delivery_cost = 10;
             $invoice->status        = $data['payment_status'];
@@ -539,7 +541,7 @@ class PaymentController extends Controller
 
             $payment = new Payment;
             $payment->invoice_id    = $invoice->id;
-            $payment->cash          = $input['cash'];
+            $payment->cash          = 'cash';
             $payment->voucher       = $data['voucher_value'];
             $payment->status        = $data['payment_status'];
             $payment->payment_type  = $data['payment_type'];
@@ -549,39 +551,114 @@ class PaymentController extends Controller
         return $invoice;
     }
 
-    public function createOrder($user_id, $agent_id == null, $prev_url)
+    public function addNewOrder($user_id, $agent_id = null, $prev_url, $invoice, $order_status)
     {
+        $new_order_no = $this->getNewOrderNo($user_id, $agent_id);
+
         if($agent_id != NULL || $agent_id != '')
         {
-            $order_no = AgentOrder::latest()->value('do_no');
+            $order = new AgentOrder;
+            $order->user_id     = $user_id;
+            $order->invoice_id  = $invoice->id;
+            $order->do_no       = $new_order_no;
+            $order->total_items = Cart::count();
+            $order->status      = $order_status;
+            $order->save();
 
-            if (isset($order_no)){
-                $new_order_no = $order_no + 1;
-            } 
-            else 
-            {
-                $new_order_no = 100000000;
+            foreach (Cart::content() as $item) {
+                $order_item = new AgentOrderItem;
+                $order_item->order_id   = $order->id;
+                $order_item->product_id = $item->id;
+                $order_item->qty        = $item->qty;
+                $order_item->save();   
             }
         }
         else
         {
-            $order_no = Order::latest()->value('do_no');
+            $order = new Order;
+            $order->user_id     = $user_id;
+            $order->invoice_id  = $invoice->id;
+            $order->do_no       = $new_order_no;
+            $order->total_items = Cart::count();
+            $order->status      = $order_status;
+            $order->save();
 
-            if (isset($order_no)){
-                $new_order_no = $order_no + 1;
-            } 
-            else 
-            {
-                $new_order_no = 100000000;
+            foreach (Cart::content() as $item) {
+                $order_item = new OrderItem;
+                $order_item->order_id   = $order->id;
+                $order_item->product_id = $item->id;
+                $order_item->qty        = $item->qty;
+                $order_item->save();     
             }
+
+            $product_sale = $this->productSale();
         }
         
-        return $new_order_no
+        return $order;
+    }
+
+    public function getNewOrderNo($user_id, $agent_id = null)
+    {
+        $model = ($agent_id != NULL || $agent_id != '') ? 'AgentOrder':'Order';
+
+        if (isset($order_no)){
+            $new_order_no = $order_no + 1;
+        } 
+        else 
+        {
+            $new_order_no = 100000000;
+        }
+
+        // if($agent_id != NULL || $agent_id != '')
+        // {
+        //     $order_no = AgentOrder::latest()->value('do_no');
+
+        //     if (isset($order_no)){
+        //         $new_order_no = $order_no + 1;
+        //     } 
+        //     else 
+        //     {
+        //         $new_order_no = 100000000;
+        //     }
+        // }
+        // else
+        // {
+        //     $order_no = Order::latest()->value('do_no');
+
+        //     if (isset($order_no)){
+        //         $new_order_no = $order_no + 1;
+        //     } 
+        //     else 
+        //     {
+        //         $new_order_no = 100000000;
+        //     }
+        // }
+        
+        return $new_order_no;
     }
 
     public function productSale()
     {
+        foreach (Cart::content() as $item) 
+        {
+            $product_sales = ProductSale::firstOrNew(['product_id' => $item->id, 'month' => Carbon::today()->month, 'year' => Carbon::today()->year]);
+            $product_sales->quantity = $product_sales->quantity + $item->qty;
+            $product_sales->amount   = $product_sales->amount + ($item->qty * $item->price);
+            $product_sales->month    = Carbon::today()->month;
+            $product_sales->year     = Carbon::today()->year;
+            $product_sales->save();
+        }
+        
+    }
+
+    public function addOrderItem()
+    {
         //
+    }
+
+    public function generateInvoiceNo()
+    {
+
     }
 
 }
