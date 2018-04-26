@@ -174,28 +174,30 @@ class PaymentController extends Controller
 
         $invoice    = $this->createInvoice($input['user_id'], $input['agent_user_id'], $data);
         $order      = $this->addNewOrder($input['user_id'], $input['agent_user_id'], $data['prev_url'], $invoice, $order_status);
+        $orderItem  = $this->addOrderItem($order, $input['agent_user_id']);
+        $updateStore= $this->addTostore($input['user_id']);
         
-        if(isset($input['agent_user_id']) && $input['agent_user_id'] != 0)
-        {
-            $new_order_no = $this->getNewOrderNo($input['user_id'], $input['agent_user_id'], $data['prev_url']);
-            $invoice    = $this->createInvoice($input['user_id'], $input['agent_user_id'], $data);
+        // if(isset($input['agent_user_id']) && $input['agent_user_id'] != 0)
+        // {
+        //     $new_order_no = $this->getNewOrderNo($input['user_id'], $input['agent_user_id'], $data['prev_url']);
+        //     $invoice    = $this->createInvoice($input['user_id'], $input['agent_user_id'], $data);
 
-            $order = new AgentOrder;
-            $order->user_id     = $input['user_id'];
-            $order->invoice_id  = $invoice->id;
-            $order->do_no       = $new_order_no;
-            $order->total_items = Cart::count();
-            $order->status      = $order_status;
-            $order->save();
+        //     $order = new AgentOrder;
+        //     $order->user_id     = $input['user_id'];
+        //     $order->invoice_id  = $invoice->id;
+        //     $order->do_no       = $new_order_no;
+        //     $order->total_items = Cart::count();
+        //     $order->status      = $order_status;
+        //     $order->save();
 
-            foreach (Cart::content() as $item) {
-                $order_item = new AgentOrderItem;
-                $order_item->order_id   = $order->id;
-                $order_item->product_id = $item->id;
-                $order_item->qty        = $item->qty;
-                $order_item->save();   
-            }
-        } 
+        //     foreach (Cart::content() as $item) {
+        //         $order_item = new AgentOrderItem;
+        //         $order_item->order_id   = $order->id;
+        //         $order_item->product_id = $item->id;
+        //         $order_item->qty        = $item->qty;
+        //         $order_item->save();   
+        //     }
+        // } 
         else
         {
             $new_order_no = $this->getNewOrderNo($input['user_id'], $input['agent_user_id'], $data['prev_url']);
@@ -554,45 +556,17 @@ class PaymentController extends Controller
     public function addNewOrder($user_id, $agent_id = null, $prev_url, $invoice, $order_status)
     {
         $new_order_no = $this->getNewOrderNo($user_id, $agent_id);
+        $model = ($agent_id != NULL || $agent_id != '') ? 'AgentOrder':'Order';
 
-        if($agent_id != NULL || $agent_id != '')
-        {
-            $order = new AgentOrder;
-            $order->user_id     = $user_id;
-            $order->invoice_id  = $invoice->id;
-            $order->do_no       = $new_order_no;
-            $order->total_items = Cart::count();
-            $order->status      = $order_status;
-            $order->save();
-
-            foreach (Cart::content() as $item) {
-                $order_item = new AgentOrderItem;
-                $order_item->order_id   = $order->id;
-                $order_item->product_id = $item->id;
-                $order_item->qty        = $item->qty;
-                $order_item->save();   
-            }
-        }
-        else
-        {
-            $order = new Order;
-            $order->user_id     = $user_id;
-            $order->invoice_id  = $invoice->id;
-            $order->do_no       = $new_order_no;
-            $order->total_items = Cart::count();
-            $order->status      = $order_status;
-            $order->save();
-
-            foreach (Cart::content() as $item) {
-                $order_item = new OrderItem;
-                $order_item->order_id   = $order->id;
-                $order_item->product_id = $item->id;
-                $order_item->qty        = $item->qty;
-                $order_item->save();     
-            }
-
-            $product_sale = $this->productSale();
-        }
+        $order = new $model;
+        $order->user_id     = $user_id;
+        $order->invoice_id  = $invoice->id;
+        $order->do_no       = $new_order_no;
+        $order->total_items = Cart::count();
+        $order->status      = $order_status;
+        $order->save();
+    
+        $product_sale = $this->productSale($agent_id);
         
         return $order;
     }
@@ -601,64 +575,75 @@ class PaymentController extends Controller
     {
         $model = ($agent_id != NULL || $agent_id != '') ? 'AgentOrder':'Order';
 
-        if (isset($order_no)){
-            $new_order_no = $order_no + 1;
-        } 
-        else 
-        {
-            $new_order_no = 100000000;
-        }
+        $order_no = $model::latest()->value('do_no');
 
-        // if($agent_id != NULL || $agent_id != '')
-        // {
-        //     $order_no = AgentOrder::latest()->value('do_no');
+        $new_order_no = isset($order_no) ? ($order_no + 1) : 100000000;
 
-        //     if (isset($order_no)){
-        //         $new_order_no = $order_no + 1;
-        //     } 
-        //     else 
-        //     {
-        //         $new_order_no = 100000000;
-        //     }
-        // }
-        // else
-        // {
-        //     $order_no = Order::latest()->value('do_no');
-
-        //     if (isset($order_no)){
-        //         $new_order_no = $order_no + 1;
-        //     } 
-        //     else 
-        //     {
-        //         $new_order_no = 100000000;
-        //     }
-        // }
-        
         return $new_order_no;
     }
 
-    public function productSale()
+    public function productSale($agent_id = null)
     {
-        foreach (Cart::content() as $item) 
+        if($agent_id == NULL || $agent_id == '')
         {
-            $product_sales = ProductSale::firstOrNew(['product_id' => $item->id, 'month' => Carbon::today()->month, 'year' => Carbon::today()->year]);
-            $product_sales->quantity = $product_sales->quantity + $item->qty;
-            $product_sales->amount   = $product_sales->amount + ($item->qty * $item->price);
-            $product_sales->month    = Carbon::today()->month;
-            $product_sales->year     = Carbon::today()->year;
-            $product_sales->save();
+            foreach (Cart::content() as $item) 
+            {
+                $product_sales = ProductSale::firstOrNew(['product_id' => $item->id, 'month' => Carbon::today()->month, 'year' => Carbon::today()->year]);
+                $product_sales->quantity = $product_sales->quantity + $item->qty;
+                $product_sales->amount   = $product_sales->amount + ($item->qty * $item->price);
+                $product_sales->month    = Carbon::today()->month;
+                $product_sales->year     = Carbon::today()->year;
+                $product_sales->save();
+            }
         }
-        
     }
 
-    public function addOrderItem()
+    public function addOrderItem($order,  $agent_id = null)
     {
-        //
+        $model = ($agent_id != NULL || $agent_id != '') ? 'AgentOrderItem':'OrderItem';
+
+        foreach (Cart::content() as $item) {
+                $order_item = new $model;
+                $order_item->order_id   = $order->id;
+                $order_item->product_id = $item->id;
+                $order_item->qty        = $item->qty;
+                $order_item->save();   
+            }
     }
 
     public function generateInvoiceNo()
     {
+        //
+    }
 
+    public function addToStore($user_id)
+    {
+        $rank_id = User::find($user_id)->rank_id;
+
+        $model = $rank_id > 2 ? 'Store' : 'UserPurchase';
+
+        foreach( Cart::content() as $item )
+        {
+            $pv = Product::find($item->id)->pv;
+
+            for($qty = 0; $qty < $item->qty; $qty++)
+            {
+                $store = new $model;
+                $store->user_id     = $user_id;
+                $store->product_id  = $item->id;
+                $store->product_name= $item->name;
+                $store->price       = $item->price;
+                $store->pv          = $pv;
+                $store->status      = 'Stocking';
+                $store->save();
+            } 
+        }
+        
+    }
+
+    public function updateOrCreateWallet()
+    {
+        //
     }
 
 }
