@@ -176,274 +176,15 @@ class PaymentController extends Controller
         $order      = $this->addNewOrder($input['user_id'], $input['agent_user_id'], $data['prev_url'], $invoice, $order_status);
         $orderItem  = $this->addOrderItem($order, $input['agent_user_id']);
         $updateStore= $this->addTostore($input['user_id']);
-        
-        // if(isset($input['agent_user_id']) && $input['agent_user_id'] != 0)
-        // {
-        //     $new_order_no = $this->getNewOrderNo($input['user_id'], $input['agent_user_id'], $data['prev_url']);
-        //     $invoice    = $this->createInvoice($input['user_id'], $input['agent_user_id'], $data);
+          
+        $year = (new DateTime)->format("Y");
+        $month = (new DateTime)->format("n");
 
-        //     $order = new AgentOrder;
-        //     $order->user_id     = $input['user_id'];
-        //     $order->invoice_id  = $invoice->id;
-        //     $order->do_no       = $new_order_no;
-        //     $order->total_items = Cart::count();
-        //     $order->status      = $order_status;
-        //     $order->save();
-
-        //     foreach (Cart::content() as $item) {
-        //         $order_item = new AgentOrderItem;
-        //         $order_item->order_id   = $order->id;
-        //         $order_item->product_id = $item->id;
-        //         $order_item->qty        = $item->qty;
-        //         $order_item->save();   
-        //     }
-        // } 
-        else
-        {
-            $new_order_no = $this->getNewOrderNo($input['user_id'], $input['agent_user_id'], $data['prev_url']);
-
-            $order = new Order;
-            $order->user_id     = $input['user_id'];
-            $order->invoice_id  = $invoice->id;
-            $order->do_no       = $new_order_no;
-            $order->total_items = Cart::count();
-            $order->status      = $order_status;
-            $order->save();
-
-            $user_rank_id = User::find($input['user_id'])->rank_id;
-
-            if($data['payment_status'] == 'Fully Paid' && $user_rank_id > 2)
-            {
-                foreach (Cart::content() as $item) 
-                {
-                    $order_item = new OrderItem;
-                    $order_item->order_id   = $order->id;
-                    $order_item->product_id = $item->id;
-                    $order_item->qty        = $item->qty;
-                    $order_item->save();
-
-                    // $product_sales = ProductSale::where('product_id', $item->id)
-                    //                               ->where('month', Carbon::today()->month)
-                    //                               ->where('year', Carbon::today()->year)
-                    //                               ->first();
-                    $product_sales = ProductSale::firstOrNew(['product_id' => $item->id, 'month' => Carbon::today()->month, 'year' => Carbon::today()->year]);
-                    $product_sales->quantity = $product_sales->quantity + $item->qty;
-                    $product_sales->amount   =  $product_sales->amount + ($item->qty * $item->price);
-                    $product_sales->month = Carbon::today()->month;
-                    $product_sales->year  = Carbon::today()->year;
-                    $product_sales->save();
-
-                    $pv = Product::find($item->id)->pv;
-
-                    for($qty = 0; $qty < $item->qty; $qty++)
-                    {
-                        $store = new Store;
-                        $store->user_id     = $input['user_id'];
-                        $store->product_id  = $item->id;
-                        $store->product_name= $item->name;
-                        $store->price       = $item->price;
-                        $store->pv          = $pv;
-                        $store->status      = 'Stocking';
-                        $store->save();
-                    } 
-                }
-
-                $wallet = Wallet::firstOrNew(['user_id'  => $input['user_id']] );
-                //$wallet->current_pv   = $wallet->current_pv + $total_pv;
-                //$wallet->available_pv   = $wallet->available_pv + $pv;
-                if(!$wallet->exists || $wallet->purchased == 0)
-                {
-                    $wallet->rmvp            = $wallet->rmvp + $total_rmvp;
-                    $wallet->pv              = $wallet->pv + $total_pv;
-                    $wallet->first_purchased = $total_pv; 
-                    $wallet->purchased       = 1;
-                }
-                else
-                {
-                    $wallet->rmvp            = $wallet->rmvp + $total_rmvp;
-                    $wallet->pv              = $wallet->pv + $total_pv;
-                    $wallet->purchased       = $wallet->purchased + 1;
-                }
-                
-                $wallet->save();
-
-                $year = (new DateTime)->format("Y");
-                $month = (new DateTime)->format("n");
-
-                $sale = Sale::firstOrNew(['year' => $year , 'month' => $month]);
-                $sale->total_pv     = $sale->total_pv + $total_pv;
-                $sale->total_sale   = $sale->total_sale + Cart::total();
-                $sale->save();
-            } 
-            elseif ($data['payment_status'] == 'Fully Paid' && $user_rank_id <= 2)
-            {
-                foreach (Cart::content() as $item) 
-                {
-                    $order_item = new OrderItem;
-                    $order_item->order_id   = $order->id;
-                    $order_item->product_id = $item->id;
-                    $order_item->qty        = $item->qty;
-                    $order_item->save();
-
-                    $product_sales = ProductSale::where('product_id', $item->id)
-                                                  ->where('month', Carbon::today()->month)
-                                                  ->where('year', Carbon::today()->year)
-                                                  ->first();
-                    // $product_sales = ProductSale::firstOrNew(['product_id' => $item->id, 'month' => Carbon::today()->month, 'year' => Carbon::today()->year]);
-                    if($product_sales)
-                    {
-                        $product_sales->quantity    = $product_sales->quantity + $item->qty;
-                        $product_sales->amount      = $product_sales->amount + ($item->qty * $item->price);
-                        $product_sales->month       = Carbon::today()->month;
-                        $product_sales->year        = Carbon::today()->year;
-                        $product_sales->save();
-                    } 
-                    else
-                    {
-                        $product_sales = new ProductSale;
-                        $product_sales->quantity    = $product_sales->quantity + $item->qty;
-                        $product_sales->amount      = $product_sales->amount + ($item->qty * $item->price);
-                        $product_sales->month       = Carbon::today()->month;
-                        $product_sales->year        = Carbon::today()->year;
-                        $product_sales->save();
-                    }
-                   
-
-                    $pv = Product::find($item->id)->pv;
-
-                    for($qty = 0; $qty < $item->qty; $qty++)
-                    {
-                        $userPurchase = new UserPurchase;
-                        $userPurchase->user_id     = $input['user_id'];
-                        $userPurchase->product_id  = $item->id;
-                        $userPurchase->product_name= $item->name;
-                        $userPurchase->price       = $item->price;
-                        $userPurchase->pv          = $pv;
-                        $userPurchase->status      = 'Shipping';
-                        $userPurchase->save();
-                    }
-                }
-
-                $wallet = Wallet::firstOrNew(['user_id'  => $input['user_id']] );
-                //$wallet->available_pv   = $wallet->available_pv + $pv;
-                if(!$wallet->exists || $wallet->purchased == 0)
-                {
-                    $wallet->rmvp            = $wallet->rmvp + $total_rmvp;
-                    $wallet->pv              = $wallet->pv + $total_pv;
-                    $wallet->first_purchased = $total_pv; 
-                    $wallet->purchased       = 1;
-                }
-                else
-                {
-                    $wallet->rmvp            = $wallet->rmvp + $total_rmvp;
-                    $wallet->pv              = $wallet->pv + $total_pv;
-                    $wallet->purchased       = $wallet->purchased + 1;
-                }
-
-                $wallet->save();
-
-                $user = User::find($wallet->user_id);
-
-                if($user->rank_id == 1)
-                {
-                    if($total_pv >= 200 && $total_pv < 1000)
-                    {
-                        $user->rank()->associate(2);
-                        $user->save();
-                    }
-                    elseif($total_pv >= 1000 && $total_pv < 5000)
-                    {
-                        $user->rank()->associate(3);
-                        $user->save();
-                    }
-                    elseif($total_pv >= 5000)
-                    {
-                        $user->rank()->associate(3);
-                        $user->save();
-                    }
-                }
-                elseif($user->rank_id == 2)
-                {
-                    if($total_pv >= 1000 && $total_pv < 5000)
-                    {
-                        $user->rank()->associate(3);
-                        $user->save();
-                    }
-                    elseif($total_pv >= 5000)
-                    {
-                        $user->rank()->associate(3);
-                        $user->save();
-                    }
-                }
-                elseif($user->rank_id == 3)
-                {
-                    if($total_pv >= 5000)
-                    {
-                        $user->rank()->associate(3);
-                        $user->save();
-                    }
-                }
-
-                //if user rank upgrade to do or sdo
-                if($user->rank_id == 4)
-                {
-                    $active_do = new ActiveDo;
-                    $active_do->user_id = $user->id;
-                    $active_do->rank    = $request->rank;
-                    $active_do->save();
-
-                    $active_sdo = ActiveSdo::where('user_id', $user->id)->first();
-
-                    if($active_sdo)
-                    {
-                       $active_sdo->delete();
-                    }
-                } 
-                elseif($user->rank_id < 4 )
-                {
-                    $active_do = ActiveDo::where('user_id', $user->id)->first();
-                    $active_sdo = ActiveSdo::where('user_id', $user->id)->first();
-                    if($active_do)
-                    {
-                       $active_do->delete();  
-                    }
-
-                    if($active_sdo)
-                    {
-                        $active_sdo->delete();
-                    }
-                }
-                
-                elseif($user->rank_id == 5) 
-                {
-                    $active_do = new ActiveDo;
-                    $active_do->user_id = $user->id;
-                    $active_do->rank    = $request->rank;
-                    $active_do->save();
-
-                    $active_sdo = new ActiveSdo;
-                    $active_sdo->user_id = $user->id;
-                    $active_sdo->rank    = $request->rank;
-                    $active_sdo->save();
-                }
-                // END - if user rank upgrade to 'do' or 'sdo'
-
-                $referral = Referral::where('user_id', $user->id)->first();
-
-                if($user->rank->code_name !== $referral->rank)
-                {
-                    $referral->rank = $user->rank->code_name;
-                    $referral->save();
-                }
-
-                $year = (new DateTime)->format("Y");
-                $month = (new DateTime)->format("n");
-
-                $sale = Sale::firstOrNew(['year' => $year , 'month' => $month]);
-                $sale->total_pv     = $sale->total_pv + $total_pv;
-                $sale->total_sale   = $sale->total_sale + Cart::total();
-                $sale->save();
-            }
+        $sale = Sale::firstOrNew(['year' => $year , 'month' => $month]);
+        $sale->total_pv     = $sale->total_pv + $total_pv;
+        $sale->total_sale   = $sale->total_sale + Cart::total();
+        $sale->save();
+            
             
         }
 
@@ -641,9 +382,78 @@ class PaymentController extends Controller
         
     }
 
-    public function updateOrCreateWallet()
+    public function updateOrCreateWallet($user_id)
     {
-        //
+        $total_pv         = $this->getTotalPv();
+        $total_rmvp       = $this->getTotalRmvp();
+
+        $wallet = Wallet::firstOrNew(['user_id'  => $user_id]);
+       
+        if(!$wallet->exists || $wallet->purchased == 0)
+        {
+            $wallet->rmvp            = $wallet->rmvp + $total_rmvp;
+            $wallet->pv              = $wallet->pv + $total_pv;
+            $wallet->first_purchased = $total_pv; 
+            $wallet->purchased       = 1;
+        }
+        else
+        {
+            $wallet->rmvp            = $wallet->rmvp + $total_rmvp;
+            $wallet->pv              = $wallet->pv + $total_pv;
+            $wallet->purchased       = $wallet->purchased + 1;
+        }
+        
+        $wallet->save();
+
+        $updateUserRank = $this->updateUserRank($user_id);
+    }
+
+    public function updateUserRank($user_id)
+    {
+        $total_pv      = $this->getTotalPv();
+        $qualifiedRank = $this->getQualifiedRank($user_id);
+        
+        $user = User::find($user_id);
+
+        if($qualifiedRank > $user->rank_id)
+        {
+            $user->rank()->associate($qualifiedRank);
+            $user->save(); 
+
+            $referral = Referral::where('user_id', $user->id)->first();
+            $referral->rank = $user->rank->code_name;
+            $referral->save();
+            
+            if($qualifiedRank == 4)
+            {
+                $active_do = new ActiveDo;
+                $active_do->user_id = $user->id;
+                $active_do->rank    = $request->rank;
+                $active_do->save();
+            }
+        }
+    }
+
+    public function getQualifiedRank($user_id)
+    {
+        $total_pv = $this->getTotalPv();
+
+        switch ($total_pv) {
+            case ($total_pv >= 200 && $total_pv < 1000):
+                $rank_id = 2;
+                break;
+            case ($total_pv >= 1000 && $total_pv < 5000):
+                $rank_id = 3;
+                break;
+            case ($total_pv >= 5000):
+                $rank_id = 4;
+                break;
+            default:
+                $rank_id = 1;
+                break;
+        }
+
+        return $rank_id;
     }
 
 }
