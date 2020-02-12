@@ -75,33 +75,40 @@ class ShopController extends Controller
         if($itemType == 'product')
         {
             $product = Product::find($request->id);
-            Cart::add($product->id, 'Product: '.$product->name, $quantity, $product->wm_price);
+            $addtocart = Cart::add($product->id, 'Product: '.$product->name, $quantity, $product->wm_price);
 
         } else {
             $package = Package::find($request->id);
-            Cart::add($package->id, 'Package: '.$package->name, $quantity, $package->wm_price);
+            $addtocart = Cart::add($package->id, 'Package: '.$package->name, $quantity, $package->wm_price);
         }
 
         return redirect()->back();
+        //return response()->json($addtocart);
+
     }
 
     public function updateCart(Request $request, $id)
     {
         $rowId = $id;
-        Cart::update($rowId, $request->qty);
+        $cart  = Cart::update($rowId, $request->qty);
 
-        return back();
+        //return redirect()->back();
+        return response()->json($cart);
     }
 
     public function checkout()
     {   
-        //$cust_address = 
         return view('shops.checkout');
     }
 
     public function cart()
     {
         return view('shops.cart');
+    }
+
+    public function firstCart()//for first purchase upon registration
+    {
+        return view('shops.first-cart');
     }
 
     public function agentStoreCart($id)
@@ -113,6 +120,12 @@ class ShopController extends Controller
     {
         Cart::destroy();
 
+        return redirect()->back();
+    }
+
+    public function removeFromCart($id)
+    {
+        $cart = Cart::remove($id);
         return redirect()->back();
     }
 

@@ -66,10 +66,10 @@ Route::prefix('admin')->group(function (){
 	Route::get('/password/reset/{token}', 'Auth\AdminResetPasswordController@showResetForm')->name('admin.password.reset');
 
 
-	Route::get('/register-member', 'AdminController@registrationMemberForm');
-  	Route::post('/register-member', 'AdminController@registerMember');
+	// Route::get('/register-member', 'AdminController@registrationMemberForm');
+ //  	Route::post('/register-member', 'AdminController@registerMember');
 
-  	Route::get('admin/firstTimePurchaseRegistration', 'AdminController@firstTimePurchaseRegistration');
+ //  	Route::get('admin/firstTimePurchaseRegistration', 'AdminController@firstTimePurchaseRegistration');
 
   Route::get('/register-staff', 'AdminController@registrationStaffForm');
   Route::post('/register-staff', 'AdminController@registerStaff');
@@ -90,6 +90,12 @@ Route::prefix('admin')->group(function (){
 	Route::post('/revokerole', 'AdminController@postRevokeRole');
 	Route::get('/lists', 'AdminController@index');
 });
+
+//Register Route
+Route::get('admin/register-member', 'RegisterMemberController@registrationMemberForm');
+Route::post('/register-member', 'RegisterMemberController@registerMember');
+
+Route::get('/admin/firstTimePurchaseRegistration', 'RegisterMemberController@firstTimePurchaseRegistration')->name('firstTimePurchaseRegistration');
 
 //Route::resource('accounts', 'AccountController');
 Route::get('mywallet', 'WalletController@mywallet');
@@ -141,9 +147,12 @@ Route::get('shop/agent-store/{id}', 'ShopController@agentStore');
 Route::post('shop/addToCart', 'ShopController@addToCart');
 Route::put('shop/cart/update/{id}', 'ShopController@updateCart')->name('update.cart');
 Route::get('shop/cart', 'ShopController@cart');
+Route::get('shop/first-cart', 'ShopController@firstCart');
 Route::get('shop/cart/{id}', 'ShopController@agentStoreCart');
+Route::delete('shop/remove/{pid}', 'ShopController@removeFromCart');
 Route::get('shop/checkout', 'ShopController@checkout');
 Route::get('shop/emptyCart', 'ShopController@emptyCart');
+
 
 
 /*

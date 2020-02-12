@@ -1,4 +1,4 @@
-@extends('layouts.homer.app')
+@extends('layouts.joli.app')
   {{-- Page title --}}
 @section('title')
   Cash
@@ -44,8 +44,9 @@
 @if(isset($id))
 <input type="hidden" name="agent_user_id" value="{{ $id }}">
 @endif
+<input type="hidden" name="prev_url" value="{{ $prev_url}}">
 <input type="hidden" name="user_id" value="{{ $customer->id }}">
-<input type="hidden" name="invoice_no" value="{{ $new_invoice_no}}">
+{{-- <input type="hidden" name="invoice_no" value="{{ $new_invoice_no}}"> --}}
 <section class="invoice">
   <!-- title row -->
   <div class="row">
@@ -158,7 +159,7 @@
         <table class="table">
           <tbody><tr>
             <th style="width:50%">Subtotal:</th>
-            <td>MYR {{ number_format(Cart::subtotal(),2,'.',',') }}</td>
+            <td>MYR {{ Cart::subtotal() }}</td>
           </tr>
           <tr>
             <th>Total GST(6%)</th>
@@ -170,7 +171,7 @@
           </tr>
           <tr>
             <th>Total:</th>
-            <td>MYR {{ number_format(Cart::total(),2,'.',',') }}</td>
+            <td>MYR {{ Cart::total()}}</td>
           </tr>
         </tbody></table>
       </div>
